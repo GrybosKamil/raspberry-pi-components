@@ -256,9 +256,9 @@ class TCS34725:
         if(self.RGB888_B > 30):
             self.RGB888_B = self.RGB888_B - 30
         
-        self.RGB888_R = self.RGB888_R * 255 / 225
-        self.RGB888_G = self.RGB888_G * 255 / 225
-        self.RGB888_B = self.RGB888_B * 255 / 225
+        self.RGB888_R = int(self.RGB888_R * 255 / 225)
+        self.RGB888_G = int(self.RGB888_G * 255 / 225)
+        self.RGB888_B = int(self.RGB888_B * 255 / 225)
         
         self.RGB888 = (self.RGB888_R<<16) | (self.RGB888_G<<8) |(self.RGB888_B)
 
@@ -287,9 +287,9 @@ class TCS34725:
         if(RGB565_B > 30):
             RGB565_B = RGB565_B - 30
         
-        RGB565_R = RGB565_R * 255 / 225
-        RGB565_G = RGB565_G * 255 / 225
-        RGB565_B = RGB565_B * 255 / 225  
+        RGB565_R = int(RGB565_R * 255 / 225)
+        RGB565_G = int(RGB565_G * 255 / 225)
+        RGB565_B = int(RGB565_B * 255 / 225)  
         self.RG565 = (((RGB565_R>>3) << 11) | ((RGB565_G>>2) << 5) | (RGB565_B>>3 ))&0xffff
 
     def Get_Lux(self):
@@ -312,8 +312,7 @@ class TCS34725:
             Gain_temp = 60
  
         cpl = (atime_ms * Gain_temp) / (TCS34725_GA * TCS34725_DF);
-        lux = (TCS34725_R_Coef * (float)(r_comp) + TCS34725_G_Coef * \
-            (float)(g_comp) +  TCS34725_B_Coef * (float)(b_comp)) / cpl;
+        lux = (TCS34725_R_Coef * (float)(r_comp) + TCS34725_G_Coef * (float)(g_comp) +  TCS34725_B_Coef * (float)(b_comp)) / cpl;
         return lux;
         
     def Get_ColorTemp(self):
@@ -329,20 +328,3 @@ class TCS34725:
 
     def SetLight(self, value):
         self.pwm.start(value)
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-
-\

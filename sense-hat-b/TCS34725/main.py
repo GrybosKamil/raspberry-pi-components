@@ -27,5 +27,5 @@ try:
        
 except:
     GPIO.cleanup()
-    print "\nProgram end"
+    print("\nProgram end")
     exit()
