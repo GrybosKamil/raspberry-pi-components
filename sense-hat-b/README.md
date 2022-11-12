@@ -14,7 +14,7 @@ sudo reboot
 ## python3
 ### install python3
 ```
-sudo apt-get install python-pip3 
+sudo apt-get install python-pip3  #replace with python3-pip
 sudo pip3 install RPi.GPIO
 sudo pip3 install spidev
 sudo apt-get install python3-smbus
