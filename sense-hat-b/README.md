@@ -18,6 +18,7 @@ sudo apt-get install python-pip3  #replace with python3-pip
 sudo pip3 install RPi.GPIO
 sudo pip3 install spidev
 sudo apt-get install python3-smbus
+sudo pip3 install adafruit-circuitpython-shtc3
 ```
 
 ### original demo
@@ -27,6 +28,9 @@ wget https://www.waveshare.com/w/upload/6/6c/Sense-HAT-B-Demo.7z
 7z x Sense-HAT-B-Demo.7z -O./Sense-HAT-B-Demo
 cd Sense-HAT-B-Demo
 ```
+
+#### warning
+SHTC3 has SHTC3.so file for 32 bit system, thus usage of adafruit-circuitpython-shtc3 is solution for 64 bit systems
 
 ```
 cd ICM-20948/Raspberry\ Pi/python/
