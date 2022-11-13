@@ -23,6 +23,7 @@ class SHTC3:
             "humidity": self.read_humidity()
         }
 
+
 if __name__ == "__main__":
     shtc3 = SHTC3()
     while True:
