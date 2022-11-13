@@ -28,4 +28,6 @@ if __name__ == "__main__":
     shtc3 = SHTC3()
     while True:
         data = shtc3.read_data()
-        print({'temperature': '%6.2f°C' % data["temperature"], 'humidity': '%6.2f%%' % data["humidity"] })
+        print({ 'temperature': '%6.2f°C' % data["temperature"], \
+                'humidity': '%6.2f%%' % data["humidity"] \
+        })

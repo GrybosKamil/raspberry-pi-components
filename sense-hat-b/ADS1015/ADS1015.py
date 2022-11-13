@@ -56,6 +56,10 @@ class ADS1015(object):
     def __init__(self,address=ADS_I2C_ADDRESS):
         self._address = address
         self._bus = smbus.SMBus(1)
+        state=ads1015._read_u16(ADS_POINTER_CONFIG) & 0x8000
+        if (state!=0x8000):
+            print("\nADS1015 Error\n")
+
     def __ADS1015_SINGLE_READ(self,channel):                    #Read single channel data
         data=0
         Config_Set =  ( ADS_CONFIG_MODE_NOCONTINUOUS        |   #mode：Single-shot mode or power-down state    (default)
@@ -104,9 +108,6 @@ class ADS1015(object):
 
 if __name__ == '__main__':
     ads1015=ADS1015()
-    state=ads1015._read_u16(ADS_POINTER_CONFIG) & 0x8000
-    if (state!=0x8000):
-        print("\nADS1015 Error\n")
     while True:
         data = ads1015.read_data()
         print({ 'AIN0': '%d(%dmv)' % (data["AIN0"], data["AIN0"] * 2), \
