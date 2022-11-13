@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import time
 import RPi.GPIO as GPIO
-from TCS34725 import TCS34725
+from TCS34725_old import TCS34725
 
 
 try:
