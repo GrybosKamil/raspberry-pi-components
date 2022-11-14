@@ -404,13 +404,14 @@ if __name__ == '__main__':
   icm20948=ICM20948()
   while True:
     data = icm20948.read_data()
-    print({ "roll": '%.2f' % data["roll"], \
-            "pitch": '%.2f' % data["pitch"], \
-            "yaw": '%.2f' % data["yaw"] \
+    print({ 
+      "roll": '%.2f' % data["roll"], \
+      "pitch": '%.2f' % data["pitch"], \
+      "yaw": '%.2f' % data["yaw"], \
+      "acceleration": "X = %d , Y = %d , Z = %d" % (data["acceleration"]["x"], data["acceleration"]["y"], data["acceleration"]["z"]), \
+      "gyroscope": "X = %d , Y = %d , Z = %d" % (data["gyroscope"]["x"], data["gyroscope"]["y"], data["gyroscope"]["z"]), \
+      "magnetic": "X = %d , Y = %d , Z = %d" % (data["magnetic"]["x"], data["magnetic"]["y"], data["magnetic"]["z"]) \
     })
-    print({ "acceleration": "X = %d , Y = %d , Z = %d" % (data["acceleration"]["x"], data["acceleration"]["y"], data["acceleration"]["z"] )})
-    print({ "gyroscope": "X = %d , Y = %d , Z = %d" % (data["gyroscope"]["x"], data["gyroscope"]["y"], data["gyroscope"]["z"] )})
-    print({ "magnetic": "X = %d , Y = %d , Z = %d" % (data["magnetic"]["x"], data["magnetic"]["y"], data["magnetic"]["z"] )})
     
     time.sleep(0.1)
     

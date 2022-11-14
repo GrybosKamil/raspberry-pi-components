@@ -110,8 +110,9 @@ if __name__ == '__main__':
     ads1015=ADS1015()
     while True:
         data = ads1015.read_data()
-        print({ 'AIN0': '%d(%dmv)' % (data["AIN0"], data["AIN0"] * 2), \
-                'AIN1': '%d(%dmv)' % (data["AIN1"], data["AIN1"] * 2), \
-                'AIN2': '%d(%dmv)' % (data["AIN2"], data["AIN2"] * 2), \
-                'AIN3': '%d(%dmv)' % (data["AIN3"], data["AIN3"] * 2) \
+        print({ 
+            'AIN0': '%d(%dmv)' % (data["AIN0"], data["AIN0"] * 2), \
+            'AIN1': '%d(%dmv)' % (data["AIN1"], data["AIN1"] * 2), \
+            'AIN2': '%d(%dmv)' % (data["AIN2"], data["AIN2"] * 2), \
+            'AIN3': '%d(%dmv)' % (data["AIN3"], data["AIN3"] * 2) \
         })

@@ -82,6 +82,7 @@ if __name__ == '__main__':
     lps22hb=LPS22HB()
     while True:
         data = lps22hb.read_data()        
-        print({ 'temperature': '%6.2f°C' % data["temperature"], \
-                'pressure': '%6.2fhPa' % data["pressure"] \
+        print({ 
+            'temperature': '%6.2f°C' % data["temperature"], \
+            'pressure': '%6.2fhPa' % data["pressure"] \
         })
