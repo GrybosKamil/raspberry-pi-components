@@ -114,6 +114,11 @@ class TCS34725:
         GPIO.setup(INT_PORT, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         if (self.debug):
           print("Reseting TSL2581")
+        if(self.TCS34725_init() == 1):
+           raise Exception("TCS34725 initialization error")
+        else:
+            print("TCS34725 initialization success!!")
+        # time.sleep(2)
 
     def Write_Byte(self, reg, value):
         "Writes an 8-bit value to the specified register/address"
@@ -290,7 +295,7 @@ class TCS34725:
         RGB565_R = int(RGB565_R * 255 / 225)
         RGB565_G = int(RGB565_G * 255 / 225)
         RGB565_B = int(RGB565_B * 255 / 225)  
-        self.RG565 = (((RGB565_R>>3) << 11) | ((RGB565_G>>2) << 5) | (RGB565_B>>3 ))&0xffff
+        self.RGB565 = (((RGB565_R>>3) << 11) | ((RGB565_G>>2) << 5) | (RGB565_B>>3 ))&0xffff
 
     def Get_Lux(self):
         atime_ms = ((256 - self.IntegrationTime_t) * 2.4);
@@ -329,28 +334,38 @@ class TCS34725:
     def SetLight(self, value):
         self.pwm.start(value)
 
+    def read_data(self):
+        self.Get_RGBData()
+        self.GetRGB888()
+        self.GetRGB565()
+        
+        return {
+            "R": self.RGB888_R,
+            "G": self.RGB888_G,
+            "B": self.RGB888_B,
+            "C": self.C,
+            "RGB565": self.RGB565,
+            "RGB888":self.RGB888,
+            "LUX": self.Get_Lux(),
+            "CT": self.Get_ColorTemp(),
+        }
+
 
 if __name__ == '__main__':
     try:
-        Light=TCS34725(0X29, debug=False)
-        if(Light.TCS34725_init() == 1):
-            print("TCS34725 initialization error!!")
-        else:
-            print("TCS34725 initialization success!!")
-        time.sleep(2)
+        tcs34725 = TCS34725()
         while True:
-            Light.Get_RGBData()
-            Light.GetRGB888()
-            Light.GetRGB565()
-            print("R: %d "%Light.RGB888_R), 
-            print("G: %d "%Light.RGB888_G), 
-            print("B: %d "%Light.RGB888_B), 
-            print("C: %#x "%Light.C),
-            print("RGB565: %#x "%Light.RG565),
-            print("RGB888: %#x "%Light.RGB888),    
-            print("LUX: %d "%Light.Get_Lux()),
-            print("CT: %dK "%Light.Get_ColorTemp())
-        
+            data = tcs34725.read_data()
+            print({
+                "R": '%d' % data["R"],
+                "G": '%d' % data["G"],
+                "B": '%d' % data["B"],
+                "C": '%#x' % data["C"],
+                "RGB565": '%#x' % data["RGB565"],
+                "RGB888": '%#x' % data["RGB888"],
+                "LUX": '%d' % data["LUX"],
+                "CT": '%dK' % data["CT"],
+            })
     except:
         GPIO.cleanup()
         print("\nProgram end")
