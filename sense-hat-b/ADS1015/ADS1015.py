@@ -58,7 +58,7 @@ class ADS1015(object):
         self._bus = smbus.SMBus(1)
         state=ads1015._read_u16(ADS_POINTER_CONFIG) & 0x8000
         if (state!=0x8000):
-            print("\nADS1015 Error\n")
+            raise Exception("ADS1015 Error")
 
     def __ADS1015_SINGLE_READ(self,channel):                    #Read single channel data
         data=0

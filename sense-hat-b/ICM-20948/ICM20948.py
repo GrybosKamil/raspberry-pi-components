@@ -314,8 +314,7 @@ class ICM20948(object):
     my = my * norm
     mz = mz * norm
 
-    # compute reference direction of flux
-    hx = 2 * mx * (0.5 - q2q2 - q3q3) + 2 * my * (q1q2 - q0q3) + 2 * mz * (q1q3 + q0q2)
+    # compute reference direction of flux    hx = 2 * mx * (0.5 - q2q2 - q3q3) + 2 * my * (q1q2 - q0q3) + 2 * mz * (q1q3 + q0q2)
     hy = 2 * mx * (q1q2 + q0q3) + 2 * my * (0.5 - q1q1 - q3q3) + 2 * mz * (q2q3 - q0q1)
     hz = 2 * mx * (q1q3 - q0q2) + 2 * my * (q2q3 + q0q1) + 2 * mz * (0.5 - q1q1 - q2q2)         
     bx = math.sqrt((hx * hx) + (hy * hy))
@@ -364,37 +363,56 @@ class ICM20948(object):
         bRet = true
         return bRet
   def icm20948CalAvgValue(self):
-    MotionVal[0]=Gyro[0]/32.8
-    MotionVal[1]=Gyro[1]/32.8
-    MotionVal[2]=Gyro[2]/32.8
-    MotionVal[3]=Accel[0]
-    MotionVal[4]=Accel[1]
-    MotionVal[5]=Accel[2]
-    MotionVal[6]=Mag[0]
-    MotionVal[7]=Mag[1]
-    MotionVal[8]=Mag[2]
-    
-if __name__ == '__main__':
-  import time
-  print("\nSense HAT Test Program ...\n")
-  MotionVal=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
-  icm20948=ICM20948()
-  while True:
-    icm20948.icm20948_Gyro_Accel_Read()
-    icm20948.icm20948MagRead()
-    icm20948.icm20948CalAvgValue()
-    time.sleep(0.1)
-    icm20948.imuAHRSupdate(MotionVal[0] * 0.0175, MotionVal[1] * 0.0175,MotionVal[2] * 0.0175,
+    return [Gyro[0]/32.8, Gyro[1]/32.8, Gyro[2]/32.8, \
+            Accel[0], Accel[1], Accel[2], \
+            Mag[0], Mag[1], Mag[2]]
+
+  def read_data(self):
+    self.icm20948_Gyro_Accel_Read()
+    self.icm20948MagRead()
+    MotionVal = self.icm20948CalAvgValue()
+    self.imuAHRSupdate(MotionVal[0] * 0.0175, MotionVal[1] * 0.0175,MotionVal[2] * 0.0175,
                 MotionVal[3],MotionVal[4],MotionVal[5], 
                 MotionVal[6], MotionVal[7], MotionVal[8])
     pitch = math.asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3
     roll  = math.atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3
     yaw   = math.atan2(-2 * q1 * q2 - 2 * q0 * q3, 2 * q2 * q2 + 2 * q3 * q3 - 1) * 57.3
-    print("\r\n /-------------------------------------------------------------/ \r\n")
-    print('\r\n Roll = %.2f , Pitch = %.2f , Yaw = %.2f\r\n'%(roll,pitch,yaw))
-    print('\r\nAcceleration:  X = %d , Y = %d , Z = %d\r\n'%(Accel[0],Accel[1],Accel[2]))  
-    print('\r\nGyroscope:     X = %d , Y = %d , Z = %d\r\n'%(Gyro[0],Gyro[1],Gyro[2]))
-    print('\r\nMagnetic:      X = %d , Y = %d , Z = %d'%((Mag[0]),Mag[1],Mag[2]))
+    
+    return {
+		    "pitch": pitch,
+		    "roll": roll,
+            "yaw": yaw,
+            "acceleration": {
+                "x": Accel[0],
+                "y": Accel[1],
+                "z": Accel[2]
+            },
+            "gyroscope": {
+                "x": Gyro[0],
+                "y": Gyro[1],
+                "z": Gyro[2]
+            },
+            "magnetic": {
+                "x": Mag[0],
+                "y": Mag[1],
+                "z": Mag[2]
+            }
+	  }
+
+    
+if __name__ == '__main__':
+  icm20948=ICM20948()
+  while True:
+    data = icm20948.read_data()
+    print({ "roll", '%.2f' % data["roll"], \
+            "pitch", '%.2f' % data["pitch"], \
+            "yaw", '%.2f' % data["yaw"] \
+    })
+    print({ "acceleration", "X = %d , Y = %d , Z = %d" % (data["acceleration"]["x"], data["acceleration"]["y"], data["acceleration"]["z"] )})
+    print({ "gyroscope", "X = %d , Y = %d , Z = %d" % (data["gyroscope"]["x"], data["gyroscope"]["y"], data["gyroscope"]["z"] )})
+    print({ "magnetic", "X = %d , Y = %d , Z = %d" % (data["magnetic"]["x"], data["magnetic"]["y"], data["magnetic"]["z"] )})
+    
+    time.sleep(0.1)
     
 
 
